@@ -7,15 +7,15 @@
 # include<string>
 
 using namespace std;
-const int Q=9;		//D2Q9Ä£ĞÍ
-const int NX=256;	//x·½Ïò
-const int NY=256;	//y·½Ïò
+const int Q=9;		//D2Q9æ¨¡å‹
+const int NX=256;	//xæ–¹å‘
+const int NY=256;	//yæ–¹å‘
 const double U=0.1;
 
 int e[Q][2]={{0,0},{1,0},{0,1},{-1,0},{0,-1},{1,1},{-1,1},
-	{-1,-1},{1,-1}}; // Ä£ĞÍËÙ¶ÈÅäÖÃ
+	{-1,-1},{1,-1}}; // æ¨¡å‹é€Ÿåº¦é…ç½®
 double w[Q]={4.0/9,1.0/9,1.0/9,1.0/9,1.0/9,1.0/36,1.0/36,
-	1.0/36,1.0/36};  // Á£×ÓËÙ¶Èº¯Êı
+	1.0/36,1.0/36};  // ç²’å­é€Ÿåº¦å‡½æ•°
 double rho[NX+1][NY+1],u[NX+1][NY+1][2],u0[NX+1][NY+1][2],
 	f[NX+1][NY+1][Q],F[NX+1][NY+1][Q]; 
 int i,j,k,ip,jp,n,P,Z;
@@ -66,7 +66,7 @@ void init()
 	tau_f=3.0*niu+0.5;
 	std::cout<<"tau_f= "<<tau_f<<endl;
 
-	for(i=0;i<=NX;i++) //³õÊ¼»¯
+	for(i=0;i<=NX;i++) //åˆå§‹åŒ–
 		for(j=0;j<=NY;j++)
 		{
 		  u[i][j][0]=0;
@@ -80,7 +80,7 @@ void init()
 		}
 }
 
-double feq(int k,double rho,double u[2]) //¼ÆËãÆ½ºâÌ¬·Ö²¼º¯Êı
+double feq(int k,double rho,double u[2]) //è®¡ç®—å¹³è¡¡æ€åˆ†å¸ƒå‡½æ•°
 {
 	double eu,uv,feq;
 	eu=(e[k][0]*u[0]+e[k][1]*u[1]);
@@ -91,7 +91,7 @@ double feq(int k,double rho,double u[2]) //¼ÆËãÆ½ºâÌ¬·Ö²¼º¯Êı
 
 void evolution()
 { 
-	for(i=1;i<NX;i++)//Ñİ»¯
+	for(i=1;i<NX;i++)//æ¼”åŒ–
 		for(j=1;j<NY;j++)
 			for(k=0;k<Q;k++)
 			{
@@ -101,7 +101,7 @@ void evolution()
 			    u[ip][jp])-f[ip][jp][k])/tau_f;
 			}
 
-		for(i=1;i<NX;i++) //¼ÆËãºê¹ÛÁ¿
+		for(i=1;i<NX;i++) //è®¡ç®—å®è§‚é‡
 		  for(j=1;j<NY;j++)
 		  {
 		  u0[i][j][0]=u[i][j][0];
@@ -119,8 +119,8 @@ void evolution()
 		  u[i][j][0]/=rho[i][j];
 	      u[i][j][1]/=rho[i][j];
 		}
-		  //±ß½ç´¦Àí
-			for(j=1;j<NY;j++)		//×óÓÒ±ß½ç
+		  //è¾¹ç•Œå¤„ç†
+			for(j=1;j<NY;j++)		//å·¦å³è¾¹ç•Œ
 				for(k=0;k<Q;k++)
 				{
 					rho[NX][j]=rho[NX-1][j];
@@ -130,7 +130,7 @@ void evolution()
 					f[0][j][k]=feq(k,rho[0][j],u[0][j])+f[1][j][k]
 						-feq(k,rho[1][j],u[1][j]);
 				}
-			for(i=0;i<=NX;i++)	//ÉÏÏÂ±ß½ç
+			for(i=0;i<=NX;i++)	//ä¸Šä¸‹è¾¹ç•Œ
 			  for(k=0;k<Q;k++)
 			  {
 				rho[i][0]=rho[i][1];
@@ -145,14 +145,14 @@ void evolution()
 		}
 
 
-void output(int m) //Êä³ö
+void output(int m) //è¾“å‡º
 {
 	ostringstream name;
 	name<<"cavity_"<<m<<".dat";
 	ofstream out(name.str().c_str());
 	out<<"Title= \"LBM Lid Driven Flow\""<<endl<<"VARIABLES=\"X\",\"Y\",\"U\",\"V\""
 		<<endl<<"ZONE Nodes="<<(NX+1)*(NY+1)<<","<<"Elements="<<NX*NY<<","<<"DATAPACKING=point"<<","<<"ZONETYPE=FEQUADRILATERAL"<<endl;
-	for(j=0;j<=NY;j++)//Êä³öi/j/U/V/p
+	for(j=0;j<=NY;j++)//è¾“å‡ºi/j/U/V/p
 		for(i=0;i<=NX;i++)
 		{
 			out<<double(i)<<" "<<double(j)<<" "<<u[i][j][0]<<" "<<u[i][j][1]<<endl;
